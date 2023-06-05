@@ -28,16 +28,21 @@ export const solveCaptcha = async (
   if (!outerFrame) throw new Error('solveCaptcha: captcha outer frame not found');
   if (!innerFrame) throw new Error('solveCaptcha: captcha inner frame not found');
 
-  const checkbox = await outerFrame.waitForSelector('#checkbox');
+  const [checkbox] = await Promise.allSettled([
+    outerFrame.waitForSelector('#checkbox', { state: 'visible' })
+  ]);
 
-  if (!(await innerFrame.$('.challenge'))) await checkbox?.click();
+  if (!(await innerFrame.$('.challenge')) && checkbox.status === 'fulfilled')
+    await checkbox.value?.click();
 
   try {
     const language = await innerFrame.evaluate(() => document.documentElement.lang);
 
     if (debug) console.log('* Language found = ', language);
 
-    let sitekey = await page.$eval('.h-captcha', el => el.getAttribute('data-sitekey'));
+    let sitekey = await page.evaluate(() =>
+      document.querySelector('.h-captcha')?.getAttribute('data-sitekey')
+    );
     if (!sitekey) sitekey = new URLSearchParams(innerFrame.url()).get('sitekey');
 
     await innerFrame.waitForSelector('.challenge-container', { timeout: 10 * 1000 });
