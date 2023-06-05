@@ -1,4 +1,4 @@
-import type { Frame } from 'puppeteer';
+import type { Frame } from 'playwright';
 import { getBase64 } from './base64';
 
 export const getImages = async (frame: Frame): Promise<{ [key: number]: string }> => {

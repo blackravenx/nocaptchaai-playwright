@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Page } from 'puppeteer';
+import type { Page } from 'playwright';
 import { getImages } from './images';
 import { getTarget } from './target';
 import type { subscriptionType } from './type';
@@ -8,7 +8,7 @@ import { getApiUrl, random, sleep } from './utils';
 /**
  * Solve captchas using `nocaptchaai.com` API service
  *
- * @param page - Puppeteer page instance
+ * @param page - playwright page instance
  * @param apiKey - API key
  * @param subscriptionType - `free` or `pro`
  * @param debug - `true` or `false` (default is `false`)
@@ -19,9 +19,11 @@ export const solveCaptcha = async (
   subscriptionType: subscriptionType,
   debug = false
 ): Promise<void> => {
-  const outer = await page.waitForSelector('iframe[data-hcaptcha-response]');
+  const outer = await page.waitForSelector('iframe[data-hcaptcha-response]', { state: 'attached' });
   const outerFrame = await outer?.contentFrame();
-  const inner = await page.waitForSelector('iframe:not([data-hcaptcha-response])');
+  const inner = await page.waitForSelector('iframe:not([data-hcaptcha-response])', {
+    state: 'attached'
+  });
   const innerFrame = await inner?.contentFrame();
   if (!outerFrame) throw new Error('solveCaptcha: captcha outer frame not found');
   if (!innerFrame) throw new Error('solveCaptcha: captcha inner frame not found');

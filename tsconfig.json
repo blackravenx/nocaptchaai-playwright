@@ -23,7 +23,8 @@
     "resolveJsonModule": true,
     "rootDir": "./src",
     "strict": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "typeRoots": ["node_modules/@types", "src/typings"]
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["node_modules", "lib"]

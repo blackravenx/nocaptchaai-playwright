@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+import playwright from 'playwright';
 import { solveCaptcha } from '../src';
 
 const URL = 'https://accounts.hcaptcha.com/demo';
@@ -6,14 +6,14 @@ const URL = 'https://accounts.hcaptcha.com/demo';
 const API_KEY = ''; // <-- your API key here
 
 const main = async (): Promise<void> => {
-  const browser = await puppeteer.launch({ channel: 'chrome', headless: false });
+  const browser = await playwright.chromium.launch({ headless: false });
   const page = await browser.newPage();
   await page.goto(URL);
-  await page.waitForNetworkIdle();
+  await page.waitForLoadState('networkidle');
 
-  await solveCaptcha(page, API_KEY, 'free');
+  await solveCaptcha(page, API_KEY, 'pro');
 
-  await page.screenshot({ path: `example/test.jpeg`, type: 'jpeg' });
+  await page.screenshot({ path: `example/test.jpeg` });
 
   await browser.close();
 };
