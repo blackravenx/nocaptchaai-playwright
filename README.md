@@ -1,6 +1,6 @@
 <div align="center">
 
-# noCaptchaAI Playwright (fork from https://github.com/noCaptchaAi/nocaptchaai-playwright)
+# noCaptchaAI Playwright (fork from https://github.com/noCaptchaAi/nocaptchaai-puppeteer)
 
 <img src="assets/logo.png" alt="Logo" width="100" />
 <br /><br /><br />
